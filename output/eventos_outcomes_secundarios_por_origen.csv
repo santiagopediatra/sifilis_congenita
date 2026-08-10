@@ -1,0 +1,13 @@
+outcome,Extrangera,n,eventos,pct
+CPN subóptimo (<8),no,215,149,69.3
+CPN subóptimo (<8),si,36,29,80.6
+Prematuridad,no,218,28,12.8
+Prematuridad,si,36,4,11.1
+PEG,no,219,47,21.5
+PEG,si,36,7,19.4
+Fallece,no,219,2,0.9
+Fallece,si,36,0,0
+Defecto congenito,no,219,20,9.1
+Defecto congenito,si,36,1,2.8
+Preeclampsia,no,217,22,10.1
+Preeclampsia,si,36,2,5.6

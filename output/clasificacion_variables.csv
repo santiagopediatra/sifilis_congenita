@@ -1,0 +1,75 @@
+variable,dominio,nivel_propuesto,n_valido,missing_pct,categoria_minoritaria_n,justificacion
+Año,A,descriptivo,255,0,NA,"Util para describir tendencia temporal de casos/practica clinica, no como exposicion/desenlace de un modelo individual."
+Extrangera,A,principal,255,0,36,"Variable de exposicion candidata (origen materno) coherente con el foco poblacional del proyecto y con denominadores ya auditados; sin missing, 36/255 extranjeras."
+Edad.materna,B,principal,255,0,NA,"Determinante sociodemografico clasico de sifilis congenita, continua, sin missing, rango plausible (15-46). Preferible a sus versiones categorizadas."
+Edad.materna.CODIGO,L,exclusion,255,0,14,Duplicado exacto de CATEGORIA.Edad.materna; no aporta sobre Edad.materna continua.
+CATEGORIA.Edad.materna,L,secundario,255,0,14,"Categorizacion de Edad.materna; util solo como tabla descriptiva/sensibilidad, no como variable primaria si la continua esta disponible."
+PAREJA.ESTABLE.CATEGORIA,B,secundario,255,0,76,"Proxy de soporte social/estabilidad familiar, plausible pero indirecto; sin missing. Secundario por ser un proxy y no una exposicion biologica directa."
+Estudios.CODIGO,M,exclusion,255,0,8,Codigo 0-3 sin diccionario de categorias en la base; no se puede interpretar ni reportar sin asumir un significado no documentado.
+Etnia.CATEGORIA,B,secundario,255,0,4,"Relevante para equidad en salud, pero con categorias minoritarias pequenas (blanca n=4, indigena n=13, otra n=12) y 1 inconsistencia con ETNIA.MINORITARIA: adecuada para describir, riesgosa para modelar."
+ETNIA.MINORITARIA,L,exclusion,255,0,48,Derivada de Etnia.CATEGORIA con 1 caso inconsistente (mestiza codificada como minoritaria); preferible usar Etnia.CATEGORIA directamente y corregir/decidir el criterio de 'minoritaria' de forma explicita antes de usarla.
+Alfabeta,B,descriptivo,255,0,13,Perfil sociodemografico basico; categoria minoritaria pequena (n=13 analfabetas) limita su uso como covariable de un modelo multivariable.
+Numero.gestas.previas,C,principal,255,0,1,"Variable continua/discreta de antecedente reproductivo, clinicamente relevante y sin missing; preferible a sus derivadas categoricas."
+GESTAS.PREVIAS.CATEGORIA,L,secundario,255,0,45,Categorizacion de Numero.gestas.previas; util para tablas descriptivas.
+Gestas.previas.CODIGO,L,exclusion,255,0,59,Binarizacion burda (nuligesta si/no) de Numero.gestas.previas; pierde informacion sin ganancia interpretativa sobre la CATEGORIA o la variable continua.
+Abortos.previos..CATEGORIA,C,secundario,255,0,86,"Antecedente reproductivo clasico, binaria, sin missing (86 si/169 no); secundario por ausencia de detalle de numero de abortos."
+Partos.previo.SI.NO,C,secundario,255,0,109,Redundante en gran medida con Numero.gestas.previas; se mantiene solo si se necesita el flag binario simple.
+CODIGO.PARTO.PREVIO,L,exclusion,255,0,109,Duplicado exacto de Partos.previo.SI.NO.
+Cesáreas.previas.CATEGORIA,C,descriptivo,196,23.1,49,"Missing 23.1% es estructural (nuliparas): valida para describir el subgrupo con partos previos, pero requiere manejo explicito de 'no aplica' antes de cualquier modelo, no imputacion."
+Preclampsia.personal,D,secundario,255,0,16,"DECISION DEL INVESTIGADOR (2026-08-10): la definicion operativa de trastorno hipertensivo del embarazo para el articulo es TRASTORNOS.HIPERTENSIVOS.CATEGORIA, no esta variable. Se mantiene solo como dato secundario/de contexto (posible antecedente), no como exposicion."
+Hipertensión.personal,D,exclusion,255,0,3,"Solo 3 casos positivos: frecuencia insuficiente para cualquier analisis inferencial, incluso descriptivo tabular fino."
+Eclampsia.personal,D,exclusion,255,0,NA,"Constante (0 en 255/255 casos): sin variabilidad, no aporta informacion."
+Embarazo.múltiple.CODIGO,F,descriptivo,255,0,7,"Solo 7 casos positivos; reportable como caracteristica descriptiva de la muestra, insuficiente para ajustar modelos."
+Embarazo.planeado,D,secundario,255,0,82,"Proxy psicosocial relevante para acceso a control prenatal; sin missing, balance aceptable (82 si/173 no). Secundario por ser proxy indirecto."
+Embarazo.planeado.CODIGO,L,exclusion,255,0,82,Duplicado exacto de Embarazo.planeado.
+ANTICONCEPTIVO.CODIGO,D,descriptivo,255,0,59,Historia de anticoncepcion previa; relevante para contexto reproductivo pero alejada del mecanismo de transmision de sifilis; descriptivo.
+FOLATOS.CODIGO,D,descriptivo,255,0,58,Marcador de calidad de control prenatal mas que de exposicion a sifilis; util como covariable descriptiva del cuidado prenatal.
+Hierro,D,descriptivo,232,9,30,"Mismo rol que FOLATOS.CODIGO; 9% missing, sin evidencia de relacion directa con el desenlace de interes."
+Alcohol.CODIGO,D,descriptivo,251,1.6,1,"Solo 17/251 casos con consumo (codigos 1-3, y 2-3 con n=1 cada uno): reportable como descriptivo binario (expuesta/no), inutil como variable ordinal de 4 niveles por baja frecuencia."
+DROGAS,D,descriptivo,255,0,7,"Solo 7 casos positivos: describe la muestra, no permite estimar asociacion con estabilidad."
+TABACO.ACTIVO,D,descriptivo,252,1.2,9,Solo 9 casos positivos: mismo problema de frecuencia que DROGAS.
+TABACO.PASIVO,D,secundario,252,1.2,32,"32/252 casos (12.7%), frecuencia algo mas robusta que tabaco activo; posible covariable secundaria de exposicion ambiental."
+VIOLENCIA.CODIGO,D,exclusion,213,16.5,5,"16.5% missing y solo 5 casos positivos entre los validos: alto missing + baja frecuencia simultaneos, alto riesgo de sesgo si se analiza."
+Hemorragia.1er..trim.,F,descriptivo,253,0.8,7,"Complicacion obstetrica con 7 casos positivos: describe la muestra, no permite modelar con confianza."
+Hemorragia.2do..trim.,F,descriptivo,253,0.8,6,6 casos positivos: mismo problema de frecuencia que hemorragia 1er trimestre.
+Hemorragia.3er..trim.,F,descriptivo,250,2,8,"8 casos positivos: mismo problema de frecuencia; las tres hemorragias podrian describirse combinadas ('cualquier hemorragia') solo como estadistica descriptiva, no como covariable de modelo."
+Número.Consultas.prenatales,E,principal,251,1.6,NA,"Eje central de un articulo de sifilis congenita (falla de deteccion/tratamiento prenatal): continua/discreta, 1.6% missing, variabilidad amplia (0-15)."
+Consultas.prenatales.CATEGORIA,L,secundario,251,1.6,11,"Categorizacion clinica estandar (NINGUNA/1-4/5-7/8+) de Número.Consultas.prenatales; util para tablas y para verificar linealidad del efecto, no como variable primaria alternativa."
+TIPO.DE.PARTO,F,principal,255,0,105,"Variable obstetrica central, binaria, sin missing, buen balance (105 cesarea/150 vaginal): candidata solida a covariable o a variable descriptiva del manejo del parto."
+Motivo.principal.de.induccion.o.cirugia,F,descriptivo,102,60,NA,"60% missing (150 casos estructuralmente NA por parto vaginal) y alta cardinalidad (18 categorias) en las cesareas: solo describible como listado de motivos de cesarea, no modelable."
+Edad.gestaciol.RN,G,principal,254,0.4,NA,"Determinante neonatal central (prematuridad), continua, casi sin missing (1 caso), rango plausible 29-42 semanas."
+Edad.gestacional.CATEGORIA,L,secundario,254,0.4,1,Categoria (pretermino/termino/postermino) de la que se derivan directamente PREMATURO/A.TERMINO/POSTERMINO.CODIGO; util como tabla descriptiva de 3 niveles.
+PREMATURO.CODIGO,L,secundario,254,0.4,32,Dummy derivado exacto de Edad.gestacional.CATEGORIA; aceptable como variable binaria de trabajo para el desenlace/covariable 'prematuridad' en vez de mantener las 3 dummies redundantes.
+A.TERMINO.CODIGO,L,exclusion,254,0.4,33,Dummy complementario de PREMATURO.CODIGO (misma particion en 3 categorias); mantener solo un miembro del set de dummies evita colinealidad perfecta.
+POSTERMINO.CODIGO,L,descriptivo,254,0.4,1,"Solo 1 caso positivo en 254 validos: unicamente mencionable como dato descriptivo aislado, no analizable."
+Apgar.1er..Minuto,H,secundario,249,2.4,2,"Adaptacion neonatal inmediata, discreta (1-9), 2.4% missing; secundario porque se relaciona mas con el manejo del parto que con sifilis congenita per se."
+Apgar.1.minuto..7.SI.NO,L,exclusion,249,2.4,20,Duplicado exacto de CODIGO.Apgar.1.minuto..7 (y version binarizada de Apgar.1er..Minuto).
+CODIGO.Apgar.1.minuto..7,L,secundario,249,2.4,20,Version numerica de Apgar.1.minuto..7.SI.NO; usar como binaria de trabajo solo si se prefiere el punto de corte clinico <7 sobre la escala continua.
+Apgar.5to..Minuto,H,secundario,249,2.4,1,"Igual rol que Apgar.1er..Minuto; a los 5 min es clinicamente mas pronostico, pero con solo 2 casos <7 el corte binario pierde potencia."
+Apgar.5to...7..SI.NO,L,exclusion,249,2.4,2,Solo 2 casos positivos (<7 a los 5 min): frecuencia insuficiente para cualquier uso mas alla de mencion descriptiva puntual.
+CODIGO.Apgar.5to.,L,exclusion,249,2.4,2,"Duplicado exacto de Apgar.5to...7..SI.NO, mismo problema de frecuencia (n=2)."
+Peso.al.nacer.GRAMOS,G,principal,255,0,NA,"Desenlace/covariable antropometrica central, continua, sin missing, rango plausible (955-4110g) con un extremo clinicamente coherente (mortinato)."
+PESO.EG.CATEGORIA,G,principal,255,0,9,"DECISION DEL INVESTIGADOR (2026-08-10): definicion operativa oficial de restriccion/exceso de crecimiento para el articulo (categoria 'pequeño' = restriccion de crecimiento, en lugar de RCIU). Clasificacion clinica estandar PEG/AEG/GEG derivada de peso+EG."
+RCIU,L,exclusion,255,0,49,"DECISION DEL INVESTIGADOR (2026-08-10): la definicion operativa de restriccion de crecimiento para el articulo es PESO.EG.CATEGORIA=='pequeño' (PEG), no esta variable. Se excluye del analisis principal (5 casos discordantes con PEG)."
+MACROSÓMICO,L,exclusion,255,0,9,"Derivado exacto de PESO.EG.CATEGORIA=='grande' (9 casos, coincide 100%): redundante, y ademas insuficiente en n para modelar."
+Peso..Edad.Gestacional.CODIGO,L,exclusion,255,0,8,Duplicado exacto (recodificacion numerica 1/2/3) de PESO.EG.CATEGORIA.
+Peso.al.nacimiento.CODIGO,G,secundario,255,0,4,"Clasificacion por peso absoluto (bajo/normal/macrosomico, cortes 2500/4000g), conceptualmente distinta de PESO.EG.CATEGORIA (no redundante): util como covariable secundaria o de sensibilidad."
+MASCULINO,G,secundario,255,0,123,"Caracteristica neonatal basica sin missing y buen balance (123/132); secundaria como posible modificador de efecto, no como foco primario del articulo."
+Alimento.al.alta,K,descriptivo,255,0,21,"Describe la practica de alimentacion al alta (3 categorias); util para caracterizar la cohorte, no como exposicion/desenlace de sifilis congenita."
+CONSEJERIA.LACTANCIA,K,descriptivo,255,0,113,"Indicador de proceso de atencion (consejeria brindada), util para describir calidad de atencion, no vinculado directamente al desenlace de sifilis."
+Defectos.congenitos.CODIGO,I,principal,255,0,21,"DECISION DEL INVESTIGADOR (2026-08-10): definicion operativa de defecto congenito para el articulo es binaria si/no (esta variable), por ser mas parsimoniosa que desagregar por sistema (SISTEMA.AFECTADO queda con n<=7 por categoria). Solo 21/255 (8.2%) positivos: analisis descriptivo/comparacion cruda, insuficiente para modelo ajustado."
+Defectos.congénitos.CIE,L,exclusion,22,91.4,1,"Codigo numerico interno sin diccionario CIE-10 documentado en la base y redundante con Tipos.de.defectos (texto); ademas 91.4% missing (estructural, solo aplica si Defectos.congenitos.CODIGO=1)."
+Tipos.de.defectos,I,descriptivo,21,91.8,NA,"Detalle de alta cardinalidad (13 categorias en 21 casos): solo listable como tabla descriptiva de casos individuales, no agrupable de forma no arbitraria sin criterio clinico explicito (ver regla de aprobacion #10)."
+SISTEMA.AFECTADO,I,descriptivo,20,92.2,1,"DECISION DEL INVESTIGADOR (2026-08-10): se reporta como detalle descriptivo (tabla/listado de sistemas afectados dentro de los 21 casos con defecto), no como variable de analisis; el binario Defectos.congenitos.CODIGO es la definicion operativa parsimoniosa. Agrupacion pre-existente por sistema (7 categorias, 20 casos validos), cada categoria con n<=7."
+Egreso.RN,J,principal,255,0,2,"Variable de desenlace grave (fallece/traslado/vivo) clinicamente central; sin embargo solo 2 fallecidos y 3 traslados: se reporta como principal para el articulo (desenlace critico) pero su analisis debe ser descriptivo/narrativo, no inferencial multivariable, por el n."
+RN.vivo.CODIGO,L,exclusion,254,0.4,2,Version derivada de Egreso.RN con mezcla de tipos (numerico 0/1 y texto 'traslado') y 1 inconsistencia (un 'vivo' quedo como missing en vez de 1); usar Egreso.RN como fuente unica.
+MAMA.HIV,D,descriptivo,255,0,5,"Comorbilidad materna clinicamente muy relevante en el contexto de ITS, pero solo 5/255 casos positivos: describible, no analizable como covariable de un modelo ajustado."
+BEBE.sifilis.congenita,M,exclusion,255,0,NA,"Constante (1 en 255/255): es el criterio de inclusion de la cohorte, no una variable observada con variabilidad; no es un desenlace analizable dentro de esta base."
+BEBE.SEPSIS,I,secundario,255,0,11,"Morbilidad neonatal con 11/255 (4.3%) positivos: describible y usable como desenlace secundario univariable (p.ej. proporciones por subgrupo), no como variable en un modelo multivariable complejo."
+BEBE.Hipoglicemia,I,descriptivo,255,0,5,"Solo 5 casos positivos: describir, no modelar."
+BEBE.POLICITEMIA,I,descriptivo,255,0,8,"Solo 8 casos positivos: describir, no modelar."
+BEBE.Ictericia,I,secundario,255,0,50,50/255 (19.6%) positivos: la morbilidad neonatal con mayor frecuencia en la base; candidata mas solida a desenlace secundario comparado entre subgrupos (p.ej. por control prenatal o tipo de parto).
+BEBE.Dificultad.respiratoria,I,secundario,255,0,12,"12/255 (4.7%) positivos: describible y usable como desenlace secundario univariable simple, no en modelo ajustado extenso."
+BEBE.Trastorno.alimenticio,I,descriptivo,255,0,10,"Solo 10 casos positivos: describir, no modelar."
+TRASTORNOS.HIPERTENSIVOS.CATEGORIA,D,principal,253,0.8,4,"DECISION DEL INVESTIGADOR (2026-08-10): definicion operativa oficial de trastorno hipertensivo del embarazo para el articulo (en lugar de Preclampsia.personal/Hipertensión.personal/Eclampsia.personal). Discordante en 36/253 casos con Preclampsia.personal (ver auditoria de inconsistencias), asumido como diferencia antecedente vs. evento actual."
+LACTANCIA_EXCLUSIVA_SI_NO,L,exclusion,255,0,47,Duplicado exacto de Alimento.al.alta=='lactancia exclusiva' (100% de concordancia): redundante.
