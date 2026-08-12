@@ -1,0 +1,14 @@
+tipo,archivo
+Tabla CSV,tabla1_caracteristicas_por_origen.csv
+Tabla CSV,tabla2_tasas_anio_origen.csv
+Tabla CSV,tabla3_modelo_nb_spline.csv
+Tabla CSV,tabla4_control_prenatal_por_origen.csv
+Tabla CSV,tabla4b_modelo_control_prenatal.csv
+Tabla CSV,tabla_s1_diagnosticos.csv
+Tabla CSV,predicciones_posteriores_tasa.csv
+Tablas Word,tablas_articulo.docx
+Figura PNG/PDF,figura1_tasas_modelo_final
+Figura PNG/PDF,figura2_forest_bayesiano
+Figura PNG/PDF,figura3_control_prenatal_origen
+Figura PNG/PDF,figura_s1_ppc_modelo_final
+Figura PNG/PDF,figura_dag_conceptual

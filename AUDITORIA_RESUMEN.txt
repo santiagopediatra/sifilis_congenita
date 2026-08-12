@@ -1,0 +1,188 @@
+AUDITORIA DEL PROYECTO: ANALISIS BAYESIANO DE SIFILIS CONGENITA
+Fecha de auditoria: 2026-08-12
+Directorio auditado: sifilis_congenita/
+
+1. ESTRUCTURA DEL PROYECTO
+
+sifilis_congenita/
+|-- SIFILIS_hgoia2009-2024.csv                 (casos individuales)
+|-- Partos_pais_origen_2014-2025_HGOIA.csv     (denominadores por anio/origen)
+|-- sifilis.doc                                (referencia narrativa; no usado por 01)
+|-- informe_sifilis_congenita.Rmd
+|-- R/
+|   |-- 01_auditoria_datos.R
+|   |-- 02_diccionario_y_auditoria_variables.R
+|   |-- 03_calculo_resultados.R
+|   |-- 04_figuras.R
+|   |-- 05_diagnostico_modelo_conteos.R
+|   |-- 06_modelo_bayesiano_primario.R
+|   `-- 07_sensibilidad_y_secundarios.R
+|-- output/                                    (CSV derivados)
+|   `-- bayes/                                 (RDS y CSV del modelo)
+|-- figures/bayes/                             (PPC)
+|-- diagnostico_output.txt                     (ejecucion completa de 05)
+`-- modelo_primario_output.txt                 (ejecucion completa de 06)
+
+2. RESUMEN DE LOS SCRIPTS SOLICITADOS
+
+01_auditoria_datos.R
+- Lee ambos CSV sin modificar los originales.
+- Normaliza Extrangera (si/no), agrega los casos por anio y origen y construye
+  una base anual con casos y nacimientos nacionales/extranjeros.
+- Verifica anios faltantes, negativos, duplicados, casos mayores que el
+  denominador, coherencia total/partes, suma de paises extranjeros, anios NA y
+  origen no clasificable.
+- Exporta casos_por_origen_anio.csv, base_anual_auditada.csv y
+  auditoria_denominadores.csv. Esta ultima no contiene hallazgos bajo los
+  chequeos implementados.
+
+02_diccionario_y_auditoria_variables.R
+- Perfila las 74 variables: clase, validos, missing, cardinalidad, rango y
+  frecuencias; detecta constantes, categorias escasas, inconsistencias entre
+  pares texto/codigo, rangos y missing estructural/inesperado.
+- Clasifica cada variable por dominio y nivel propuesto (principal, secundario,
+  descriptivo o exclusion).
+- IMPORTANTE: no produce una base limpia ni recodifica variables. Produce un
+  diccionario y recomendaciones. Las variables preferidas como fuentes limpias
+  incluyen Extrangera, Edad.materna continua y Numero.gestas.previas; varias
+  versiones CODIGO/CATEGORIA son redundantes o carecen de diccionario.
+- Hallazgos destacados: 36 discordancias entre trastorno hipertensivo y
+  Preclampsia.personal; 1 discordancia de etnia, 1 de egreso/RN vivo y 1 de
+  peso/edad gestacional; 3 cesareas sin motivo; BEBE.sifilis.congenita y
+  Eclampsia.personal son constantes. Hay variables con missing >90% y muchas
+  categorias con n<10.
+
+05_diagnostico_modelo_conteos.R
+- Construye 32 estratos (16 anios x dos origenes), con offset log(nacimientos).
+- Prueba Poisson: solo origen, tiempo lineal sin interaccion, lineal con
+  interaccion y spline natural (df=3, sin interaccion); usa NB con interaccion
+  como chequeo de sobredispersion.
+- Evalua AIC/BIC, LRT, dispersion de Pearson, Cook y estabilidad de la
+  interaccion.
+
+06_modelo_bayesiano_primario.R
+- Ajusta brms Poisson log-lineal a los 32 estratos:
+    casos ~ origen + anio_c + origen:anio_c + offset(log(nacimientos))
+  donde anio_c = anio - 2016.5 y nacional es la referencia.
+- Familia: poisson(link="log"). Cuatro cadenas, 4000 iteraciones por cadena,
+  warmup 2000, 8000 draws posteriores, adapt_delta=0.95, max_treedepth=12,
+  backend cmdstanr, semilla 20260810.
+- Priors (escala log): Intercept Normal(-6,1); origen extranjera Normal(0,1);
+  anio_c Normal(0,0.5); interaccion Normal(0,0.5).
+- La especificacion es deliberadamente lineal pese a que el propio encabezado
+  reconoce evidencia previa de no-linealidad.
+
+3. RESULTADOS DEL DIAGNOSTICO FRECUENTISTA (EJECUCION COMPLETA)
+
+Modelo                       df      AIC       BIC
+solo origen                   2    173.555   176.487
+lineal sin interaccion        3    166.052   170.449
+lineal con interaccion        4    167.433   173.296
+spline natural, df=3          5    157.054   164.383
+
+- LRT lineal sin interaccion vs spline: chi-cuadrado=12.998, gl=2,
+  p=0.001505. Evidencia clara contra una forma temporal estrictamente lineal.
+- LRT sin vs con interaccion: chi-cuadrado=0.61884, gl=1, p=0.4315. No hay
+  apoyo frecuentista para la interaccion.
+- Pearson chi-cuadrado/gl: 2.008 con interaccion (28 gl); 1.932 sin
+  interaccion. Sugiere sobredispersion relevante para Poisson.
+- NB: theta=10.22, SE(theta)=5.69; AIC NB=160.34 frente a Poisson con
+  interaccion=167.43 (mejora de 7.09 puntos).
+- Cook, umbral 4/n=0.125:
+    2021 nacional    D=0.810, residuo deviance= 3.86
+    2010 nacional    D=0.190, residuo deviance= 1.43
+    2023 nacional    D=0.148, residuo deviance=-1.52
+    2020 extranjera  D=0.136, residuo deviance=-1.74
+    2013 nacional    D=0.134, residuo deviance=-2.20
+- Hay 2 estratos con cero casos y 14 con menos de 5; 13 de estos ultimos son
+  del grupo extranjero.
+
+4. RESULTADOS DEL MODELO BAYESIANO PRIMARIO (EJECUCION COMPLETA)
+
+Convergencia/MCMC:
+- Rhat max exacto: 1.000708 (se muestra 1.00 redondeado).
+- ESS bulk minimo: 3137.26; ESS tail minimo: 3767.45.
+- Divergencias: 0; treedepth maximo observado: 5; hits en limite 12: 0.
+- E-BFMI minimo: 0.9876. No se observan problemas de muestreo.
+
+IRR posterior              mediana    ICr95%             P(>1)    P(<1)
+anio (por anio)             1.0412    1.0111--1.0726     0.9965   0.0035
+interaccion origen x anio   1.0457    0.9573--1.1489     0.8306   0.1694
+origen extranjera           2.3038    1.4789--3.3945     0.9999   0.0001
+
+Interpretacion: el IRR de origen corresponde al anio centrado (2016.5), no a
+un promedio marginal de todo el periodo. El IRR anual nacional impone un cambio
+porcentual constante; el efecto anual extranjero combina anio e interaccion.
+
+PPC:
+- P(var(y_rep) >= var(y_obs)) = 0.270.
+- P(y_rep >= 24) para 2021-nacional = 0.000 en los draws usados: el modelo no
+  reproduce el punto mas influyente, aun cuando el PPC global de varianza no es
+  extremo.
+
+5. DATOS DE ENTRADA
+
+SIFILIS_hgoia2009-2024.csv
+- 255 filas (casos), 74 variables, 1050 celdas NA (5.56% de 18,870 celdas).
+- Las primeras 10 filas son las lineas 2--11 del CSV; todas corresponden a
+  2009 y origen nacional. Edades: 38,22,26,35,21,39,26,28,17,29; gestas
+  previas: 1,0,3,2,0,2,3,3,0,4; tipo de parto: cesarea, cesarea, vaginal,
+  vaginal, vaginal, vaginal, cesarea, vaginal, cesarea, vaginal.
+- Missing principales: SISTEMA.AFECTADO 235/255 (92.2%), Tipos.de.defectos
+  234/255 (91.8%), Defectos congenitos CIE 233/255 (91.4%), motivo de
+  induccion/cirugia 153/255 (60%; mayormente estructural), cesareas previas
+  59/255 (23.1%; estructural en nuligestas).
+
+Partos_pais_origen_2014-2025_HGOIA.csv
+- 60 filas, 18 variables, 0 NA. Las primeras 10 filas/paises son Venezuela,
+  Colombia, Cuba, Peru, Haiti, Espana, Republica Dominicana, China, Yemen y
+  Rusia (valores completos visibles en las lineas 2--11 del CSV).
+- La suma de los paises individuales SI coincide con Total extrangeras en cada
+  anio 2009--2024 (diferencia cero en los 16 anios).
+- La suma de paises NO debe coincidir con TOTAL NACIMIENTOS: solo representa
+  partos de madres extranjeras; nacionales se obtienen por diferencia.
+- Problema de metadatos: el nombre anuncia 2014--2025, pero el archivo contiene
+  2009--2024 y ninguna columna 2025.
+- Problema de semantica del campo Total (calculado): en las filas de paises y
+  Total extrangeras suma 2014--2024 (excepto TOTAL NACIMIENTOS), mientras que
+  TOTAL NACIMIENTOS suma 2009--2024. No debe usarse sin definir el periodo.
+
+6. CONCLUSION CRITICA Y RECOMENDACIONES
+
+1) El modelo primario converge computacionalmente, pero convergencia no implica
+   especificacion adecuada. La evidencia de no-linealidad es fuerte y conocida;
+   presentar el modelo lineal como unico analisis principal puede sesgar o
+   simplificar excesivamente la trayectoria temporal.
+2) Poisson muestra sobredispersion (Pearson/gl aproximadamente 2), NB mejora el
+   AIC y el Poisson falla localmente de forma severa en 2021-nacional. El PPC de
+   varianza de 0.27 por si solo no descarta sobredispersion ni salva el ajuste.
+3) Debe reportarse como minimo una comparacion bayesiana spline/no lineal y una
+   NB, usando LOO/ELPD, PPC estratificados y sensibilidad al punto 2021-nacional.
+   Una opcion defendible es NB con funcion temporal flexible; con solo 16 puntos
+   temporales por grupo debe mantenerse parsimoniosa.
+4) La interaccion no esta respaldada claramente: LRT p=0.4315 e ICr95% del IRR
+   0.957--1.149. No debe describirse como evidencia concluyente de tendencias
+   diferenciales pese a P(IRR>1)=0.831.
+5) Los 32 estratos no son 32 observaciones independientes equivalentes a una
+   cohorte grande: hay pocos puntos temporales, conteos extranjeros escasos y
+   dependencia temporal potencial no modelada. Evaluar autocorrelacion y cambios
+   de vigilancia/cobertura.
+6) La caida de nacimientos totales (11,472 en 2009 a 2,358 en 2024) requiere
+   confirmar cobertura, completitud de 2024 y cambios institucionales. Un offset
+   incorrecto o parcial produce tasas e IRR engañosos.
+7) La base individual contiene solo casos. No permite estimar factores de riesgo
+   individuales de sifilis congenita sin controles/no casos y denominadores con
+   covariables comparables; sus 255 registros sirven para describir casos.
+8) Corregir/documentar nombre, periodo y Total (calculado) del archivo de partos;
+   añadir al script 01 la validacion horizontal de esa columna, que hoy no se
+   chequea.
+9) Reportar tasas/IRR con su anio de referencia, priors, denominadores y una
+   justificacion previa de la forma temporal. Evitar seleccionar el modelo solo
+   por significacion y distinguir claramente analisis primario preespecificado
+   de analisis de sensibilidad motivados por diagnosticos.
+
+TRAZABILIDAD
+- Salida completa del diagnostico: diagnostico_output.txt
+- Salida completa del modelo: modelo_primario_output.txt
+- Resultados numericos derivados: output/ y output/bayes/
+- Los dos scripts finalizaron con codigo de salida 0 el 2026-08-12.

@@ -1,0 +1,73 @@
+Failed to connect to system scope bus via local transport: Operation not permitted (consider using --machine=<user>@.host --user to connect to bus of other user)
+Warning message:
+In system("timedatectl", intern = TRUE) :
+  running command 'timedatectl' had status 1
+=== SCRIPT 10: MODELO NB + SPLINE ===
+
+Estratos: 32 | casos: 255 | nacimientos: 111742 
+Formula: casos ~ origen + s(anio_c, k=4, bs='tp') + offset(log_nacimientos)
+NOTA: pct_densidad_ok y media_densidad no entran en la formula.
+
+ Family: negbinomial 
+  Links: mu = log 
+Formula: casos ~ origen + s(anio_c, k = 4, bs = "tp") + offset(log_nacimientos) 
+   Data: estratos (Number of observations: 32) 
+  Draws: 4 chains, each with iter = 4000; warmup = 2000; thin = 1;
+         total post-warmup draws = 8000
+
+Smoothing Spline Hyperparameters:
+               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sds(sanio_c_1)     0.94      0.66     0.11     2.65 1.00     3609     3497
+
+Regression Coefficients:
+                 Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept           -6.07      0.15    -6.37    -5.77 1.00     7570     5643
+origenextranjera     0.86      0.26     0.35     1.38 1.00     5409     5198
+sanio_c_1            0.97      1.73    -3.19     3.82 1.00     3572     3106
+
+Further Distributional Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+shape     4.20      1.42     2.01     7.51 1.00     5587     5208
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+
+=== DIAGNOSTICOS MCMC ===
+Rhat max: 1.001313 | ESS bulk min: 2939.269 | ESS tail min: 3019.882 | divergencias: 0 
+`stat_bin()` using `bins = 30`. Pick better value `binwidth`.
+null device 
+          1 
+
+=== PPC ===
+P(var_rep >= var_obs): 0.70925 
+2021-nacional observado: 24 | P(y_rep >= observado): 0.06125 | mediana: 10 | ICr95%: 1 29 
+
+=== LOO ===
+
+Computed from 8000 by 32 log-likelihood matrix.
+
+         Estimate   SE
+elpd_loo    -80.2  5.9
+p_loo         2.4  0.6
+looic       160.5 11.9
+------
+MCSE of elpd_loo is 0.0.
+MCSE and ESS estimates assume MCMC draws (r_eff in [0.5, 1.0]).
+
+All Pareto k estimates are good (k < 0.7).
+See help('pareto-k-diagnostic') for details.
+
+=== RESULTADO FINAL ===
+# A tibble: 1 × 16
+  Script                Modelo      N_estratos Rhat_max ESS_bulk_min
+  <chr>                 <chr>            <int>    <dbl>        <dbl>
+1 10_nb_spline_agregado NB + spline         32     1.00        2939.
+  ESS_tail_min Divergencias P_var P_2021_geq_observado Mediana_pred_2021
+         <dbl>        <int> <dbl>                <dbl>             <dbl>
+1        3020.            0 0.709               0.0612                10
+  IRR_origen_med IRR_CI_inf IRR_CI_sup IRR_P_gt_1 ELPD_LOO SE_ELPD_LOO
+           <dbl>      <dbl>      <dbl>      <dbl>    <dbl>       <dbl>
+1           2.37       1.42       3.99      0.999    -80.2        5.95
+Archivos guardados en output/bayes y figures/bayes.
+=== FIN SCRIPT 10 ===

@@ -1,0 +1,75 @@
+Failed to connect to system scope bus via local transport: Operation not permitted (consider using --machine=<user>@.host --user to connect to bus of other user)
+Warning message:
+In system("timedatectl", intern = TRUE) :
+  running command 'timedatectl' had status 1
+=== SCRIPT 09: ARREGLOS DE CONTROLES PRENATALES ===
+Variables: Edad.gestaciol.RN + Numero.Consultas.prenatales
+
+Datos cargados: 255 casos, 74 variables
+
+Variable EG: Edad.gestaciol.RN | validos: 254 | rango: 29 42 | mediana: 39 
+Variable controles: Número.Consultas.prenatales | validos: 251 | rango: 0 15 | mediana: 6 
+
+EG valida (20-42): 254 
+Controles validos (0-25): 251 
+Densidad calculada: 250 | rango: 0 0.4054 | media: 0.1541 | mediana: 0.1538 
+
+Clasificacion por densidad (umbral 0.20): adecuado=71, suboptimo=179, missing=5
+Tabla cruzada clasico vs densidad:
+           
+            adecuado subóptimo <NA>
+  adecuado        70         2    1
+  subóptimo        1       177    0
+  <NA>             0         0    4
+Casos reclasificados: 3 
+
+Prematuros que pasan de suboptimo a adecuado:
+  EG_semanas controles_prenatales densidad_controles control_prenatal_clasico
+1         30                    6                0.2                subóptimo
+  control_prenatal_densidad
+1                  adecuado
+
+Embarazos a termino que pasan de adecuado a suboptimo:
+  EG_semanas controles_prenatales densidad_controles control_prenatal_clasico
+1         41                    8           0.195122                 adecuado
+2         41                    8           0.195122                 adecuado
+  control_prenatal_densidad
+1                 subóptimo
+2                 subóptimo
+
+N para modelo logistico: 250 
+Tabla de contingencia:
+            densidad_ok
+origen         0   1
+  nacional   150  64
+  extranjera  29   7
+Compiling Stan program...
+Start sampling
+ Family: bernoulli 
+  Links: mu = logit 
+Formula: densidad_ok ~ origen 
+   Data: datos_logit (Number of observations: 250) 
+  Draws: 4 chains, each with iter = 4000; warmup = 2000; thin = 1;
+         total post-warmup draws = 8000
+
+Regression Coefficients:
+                 Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept           -0.86      0.15    -1.16    -0.57 1.00     5664     4466
+origenextranjera    -0.52      0.42    -1.37     0.28 1.00     5191     4078
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+
+=== RESULTADO FINAL ===
+# A tibble: 2 × 4
+  Metodo             Adecuado Suboptimo Missing
+  <chr>                 <int>     <int>   <int>
+1 Clasico (>= 8)           73       178       4
+2 Densidad (>= 0.20)       71       179       5
+# A tibble: 1 × 7
+  Outcome           Predictor     N OR_mediana OR_IC95_inf OR_IC95_sup P_OR_gt_1
+  <chr>             <chr>     <int>      <dbl>       <dbl>       <dbl>     <dbl>
+1 Control prenatal… Origen m…   250      0.600       0.253        1.33     0.112
+Rhat max: 1.000494 | ESS bulk min: 5191.487 | ESS tail min: 4078.175 
+=== FIN SCRIPT 09 ===

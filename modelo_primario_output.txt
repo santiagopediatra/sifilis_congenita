@@ -1,0 +1,59 @@
+=== Coeficientes del modelo (para fijar priors) ===
+     class                    coef    source
+         b                         (unknown)
+         b                  anio_c (unknown)
+         b        origenextranjera (unknown)
+         b origenextranjera:anio_c (unknown)
+ Intercept                         (unknown)
+
+=== Ajustando modelo primario (priors aprobados) ===
+
+=== Resumen del modelo primario ===
+Loading required namespace: rstan
+ Family: poisson 
+  Links: mu = log 
+Formula: casos ~ origen + anio_c + origen:anio_c + offset(log(nacimientos)) 
+   Data: estratos (Number of observations: 32) 
+  Draws: 4 chains, each with iter = 4000; warmup = 2000; thin = 1;
+         total post-warmup draws = 8000
+
+Regression Coefficients:
+                        Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS
+Intercept                  -6.12      0.07    -6.26    -5.98 1.00     9436
+origenextranjera            0.83      0.21     0.39     1.22 1.00     3137
+anio_c                      0.04      0.02     0.01     0.07 1.00     4734
+origenextranjera:anio_c     0.05      0.05    -0.04     0.14 1.00     3651
+                        Tail_ESS
+Intercept                   6199
+origenextranjera            3767
+anio_c                      5107
+origenextranjera:anio_c     4583
+
+Draws were sampled using sample(hmc). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).
+
+=== Diagnosticos MCMC (modelo primario) ===
+# A tibble: 1 × 8
+  modelo           rhat_max ess_bulk_min ess_tail_min divergencias treedepth_max
+  <chr>               <dbl>        <dbl>        <dbl>        <dbl>         <dbl>
+1 primario_poisson     1.00        3137.        3767.            0             5
+  treedepth_hits_max ebfmi_min
+               <int>     <dbl>
+1                  0     0.988
+`stat_bin()` using `bins = 30`. Pick better value `binwidth`.
+
+P(y_rep >= 24 | modelo) para 2021-nacional (chequeo del punto influyente) = 0 
+P(var(y_rep) >= var(y_obs)) = 0.27 (valores muy cercanos a 0 o 1 indican que Poisson no reproduce bien la dispersion)
+Warning message:
+Dropping 'draws_df' class as required metadata was removed. 
+
+=== IRR posteriores (modelo primario) ===
+# A tibble: 3 × 6
+  parametro   IRR_mediana ICr95_inf ICr95_sup `P(IRR>1)` `P(IRR<1)`
+  <chr>             <dbl>     <dbl>     <dbl>      <dbl>      <dbl>
+1 anio_IRR           1.04     1.01       1.07      0.996   0.0035  
+2 interac_IRR        1.05     0.957      1.15      0.831   0.169   
+3 origen_IRR         2.30     1.48       3.39      1.000   0.000125
+
+=== FIN MODELO PRIMARIO ===
