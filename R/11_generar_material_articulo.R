@@ -60,7 +60,7 @@ resumir_grupo <- function(d) tibble(
     "Control prenatal subóptimo por densidad, n (%)",
     "Edad gestacional, mediana [RIC]", "Prematuro, n (%)",
     "Peso al nacer (g), mediana [RIC]", "Pequeño para EG, n (%)",
-    "Cesárea, n (%)", "Trastorno hipertensivo, n (%)",
+    "Parto por cesárea, n (%)", "Trastorno hipertensivo, n (%)",
     "Defecto congénito, n (%)", "Fallecimiento neonatal, n (%)"
   ),
   Valor = c(
@@ -172,7 +172,7 @@ fig1 <- ggplot(pred, aes(anio, tasa_mediana, color = origen, fill = origen)) +
 forest <- bind_rows(
   transmute(tabla3[1, ], efecto = Parametro, estimacion = Mediana,
             inf = ICr95_inf, sup = ICr95_sup),
-  transmute(logit, efecto = "OR: control adecuado, extranjera vs nacional",
+  transmute(logit, efecto = "OR: densidad prenatal, extranjera vs nacional",
             estimacion = OR_mediana, inf = OR_IC95_inf, sup = OR_IC95_sup)
 )
 fig2 <- ggplot(forest, aes(estimacion, efecto)) +
@@ -182,16 +182,19 @@ fig2 <- ggplot(forest, aes(estimacion, efecto)) +
   labs(title = "Estimaciones bayesianas principales", x = "Razón (escala logarítmica)", y = NULL,
        caption = "Puntos: mediana posterior; barras: ICr95%.") + tema
 
-# Figura 3: control prenatal por origen.
-fig3 <- ggplot(tabla4a, aes(origen, pct, fill = control_prenatal_densidad)) +
+# Figura 3: densidad de contactos prenatales por origen (clasificacion operacional).
+tabla4a_fig <- tabla4a %>%
+  mutate(control_prenatal_densidad = recode(control_prenatal_densidad,
+                                            "adecuado" = "denso", "subóptimo" = "no denso"))
+fig3 <- ggplot(tabla4a_fig, aes(origen, pct, fill = control_prenatal_densidad)) +
   geom_col(position = "stack", width = .65) +
   geom_text(aes(label = sprintf("%d\n%.1f%%", n, pct)),
             position = position_stack(vjust = .5), color = "white", size = 3.5) +
-  scale_fill_manual(values = c(adecuado = azul, subóptimo = naranja)) +
+  scale_fill_manual(values = c(denso = azul, `no denso` = naranja)) +
   scale_y_continuous(labels = label_percent(scale = 1), limits = c(0, 100)) +
-  labs(title = "Adecuación del control prenatal por origen materno",
-       subtitle = "Densidad ≥0.20 consultas por semana",
-       x = NULL, y = "Porcentaje", fill = "Clasificación",
+  labs(title = "Densidad de contactos prenatales por origen materno",
+       subtitle = "Clasificación operacional (denso: \u2265 0.20 consultas/semana);\nno es una medida universal de adecuación",
+       x = NULL, y = "Porcentaje", fill = "Densidad",
        caption = "Análisis descriptivo restringido a casos; no estima mediación causal.") + tema
 
 # Figura 4: PPC varianza y punto 2021 usando draws reproducibles.

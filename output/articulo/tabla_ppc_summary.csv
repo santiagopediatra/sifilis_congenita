@@ -3,7 +3,7 @@ Varianza observada,59.32157258064516
 P(var yrep >= var yobs),0.70925
 2021 nacional observado,24
 2021 mediana predictiva,10
-2021 ICr95 inf,1
-2021 ICr95 sup,29
+2021 IP95 inf,1
+2021 IP95 sup,29
 P(yrep >= observado),0.06125
 Percentil observado,0.9485

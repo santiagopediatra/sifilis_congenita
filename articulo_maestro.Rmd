@@ -22,6 +22,7 @@ mcmc<-read_csv("output/articulo/tabla_diagnosticos_mcmc.csv",show_col_types=FALS
 freq<-read_csv("output/articulo/tabla_diagnosticos_frecuentistas.csv",show_col_types=FALSE)
 den<-read_csv("output/articulo/tabla_verificacion_denominadores.csv",show_col_types=FALSE)
 s21<-read_csv("output/articulo/tabla_sensibilidad_2021.csv",show_col_types=FALSE)
+s24<-read_csv("output/articulo/tabla_sensibilidad_2024.csv",show_col_types=FALSE)
 spr<-read_csv("output/articulo/tabla_sensibilidad_priors.csv",show_col_types=FALSE)
 ppc<-read_csv("output/articulo/tabla_ppc_summary.csv",show_col_types=FALSE)
 tloo<-read_csv("output/articulo/tabla_loo_diagnosticos.csv",show_col_types=FALSE)
@@ -46,12 +47,15 @@ origen. **Resultados:** El origen materno extranjero se asoció con mayor
 incidencia hospitalaria registrada (IRR `r fmt(irr$estimador)`; ICr95%
 `r fmt(irr$ICr95_inf)`–`r fmt(irr$ICr95_sup)`;
 P[IRR>1]=`r fmt(irr$probabilidad_posterior,4)`). No hubo divergencias y las
-sensibilidades mantuvieron la dirección y la interpretación. Entre 250 casos con
-datos completos, la OR de control prenatal adecuado para origen extranjero fue
+sensibilidades (exclusión de 2021, exclusión de 2024 y priors alternativos)
+mantuvieron la dirección y la interpretación. Entre 250 casos con datos
+completos, la OR de densidad de control prenatal (clasificación operacional,
+no una medida universal de adecuación) para origen extranjero fue
 `r fmt(t4b$OR_mediana)` (ICr95% `r fmt(t4b$OR_IC95_inf)`–`r fmt(t4b$OR_IC95_sup)`).
 **Conclusión:** El origen extranjero se asoció con mayor incidencia hospitalaria
-registrada, con resultados robustos a la exclusión de 2021 y a priors razonables.
-El análisis entre casos no permite evaluar mediación por control prenatal.
+registrada, con resultados robustos a la exclusión de 2021, a la exclusión de
+2024 y a priors razonables. El análisis entre casos no permite evaluar
+mediación por control prenatal.
 
 **Palabras clave:** sífilis congénita; epidemiología; análisis bayesiano; origen
 materno; migración; Ecuador.
@@ -135,12 +139,23 @@ influyente 2021-nacional con sus distribuciones predictivas. Se calcularon
 P[varianza replicada ≥ observada] y P[conteo replicado ≥ observado]. La
 validación cruzada dejando uno fuera (LOO) evaluó la estabilidad predictiva por
 estrato; valores de Pareto-k ≥0,7 se consideraron potencialmente problemáticos.
+El modelo principal no incluyó covariables maternas individuales (p. ej. edad,
+gestas previas, control prenatal) como ajuste, porque estas solo están
+disponibles entre los casos y no existen equivalentes poblacionales en el
+denominador; la IRR de origen debe interpretarse como una asociación agregada
+no ajustada por confusores maternos individuales. Los análisis se realizaron
+en R 4.5.0 con brms 2.23.0 (backend rstan 2.32.7), posterior 1.7.0 y loo 2.8.0.
 
 ## Sensibilidades y análisis secundario
 
-Se repitió el modelo excluyendo ambos estratos de 2021. La sensibilidad de priors
-varió separadamente la desviación estándar del prior de origen (0,5 y 1,5) y la
-tasa del prior exponencial de `shape` (0,5 y 2). El análisis logístico de control
+Se repitió el modelo excluyendo ambos estratos de 2021. Los nacimientos
+institucionales de 2024 (2.358) fueron marcadamente menores que en todos los
+años previos desde 2018 (mínimo 3.657), sin que los archivos disponibles
+permitan confirmar si 2024 correspondió a un año completo o parcial de
+registro; por ello se repitió también el modelo excluyendo ambos estratos de
+2024. La sensibilidad de priors varió separadamente la desviación estándar del
+prior de origen (0,5 y 1,5) y la tasa del prior exponencial de `shape` (0,5 y
+2). El análisis logístico de control
 prenatal evaluó exclusivamente la asociación entre los casos. Usó familia
 Bernoulli con enlace logit y priors Normal(0;1,5) para el intercepto y Normal(0;1)
 para origen. Su denominador fueron los casos con edad gestacional, consultas y
@@ -216,13 +231,15 @@ Rhat máximo=`r fmt(val(mcmc,"Rhat máximo"),4)`, ESS bulk mínimo=
 una varianza replicada al menos tan grande como la observada fue
 `r fmt(val(ppc,"P(var yrep >= var yobs)"),3)`. Para 2021-nacional, el conteo
 observado fue `r val(ppc,"2021 nacional observado")`, la mediana predictiva
-`r val(ppc,"2021 mediana predictiva")` (ICr95% `r val(ppc,"2021 ICr95 inf")`–
-`r val(ppc,"2021 ICr95 sup")`) y P(Yrep≥observado)=
-`r fmt(val(ppc,"P(yrep >= observado)"),3)`. El valor observado se situó en la
-cola superior de la distribución predictiva (percentil
+`r val(ppc,"2021 mediana predictiva")` (intervalo predictivo posterior del 95%,
+IP95%, `r val(ppc,"2021 IP95 inf")`–`r val(ppc,"2021 IP95 sup")`) y
+P(Yrep≥observado)=`r fmt(val(ppc,"P(yrep >= observado)"),3)`. El valor observado
+se situó en la cola superior de la distribución predictiva (percentil
 `r fmt(100*val(ppc,"Percentil observado"),1)`), pero permaneció dentro del
 intervalo predictivo, compatible con buen ajuste global y un pico temporal poco
-frecuente bajo una tendencia suave.
+frecuente bajo una tendencia suave. Este resultado describe la coherencia
+interna del modelo con los datos observados y no debe interpretarse como
+evidencia de generalización externa.
 
 LOO produjo ELPD=`r fmt(rloo$ELPD_LOO)` (SE `r fmt(rloo$SE)`) y Pareto-k máximo
 `r fmt(rloo$pareto_k_max,3)` en `r rloo$estrato_max`; ningún estrato alcanzó 0,7.
@@ -250,8 +267,12 @@ ft(t4_show,"Tabla 4. Densidad de control prenatal por origen entre los casos","D
 ## Sensibilidades
 
 Al excluir ambos estratos de 2021, la IRR fue `r fmt(s21$IRR[2])` (ICr95%
-`r fmt(s21$ICr95_inf[2])`–`r fmt(s21$ICr95_sup[2])`). En las sensibilidades de
-priors, las medianas de IRR variaron entre `r fmt(min(spr$IRR))` y
+`r fmt(s21$ICr95_inf[2])`–`r fmt(s21$ICr95_sup[2])`). Al excluir ambos estratos
+de 2024, dado que no pudo confirmarse si corresponde a un año completo de
+registro, la IRR fue `r fmt(s24$IRR[2])` (ICr95% `r fmt(s24$ICr95_inf[2])`–
+`r fmt(s24$ICr95_sup[2])`; P[IRR>1]=`r fmt(s24$P_IRR_gt_1[2],4)`), muy similar
+a la del modelo principal. En las sensibilidades de priors, las medianas de
+IRR variaron entre `r fmt(min(spr$IRR))` y
 `r fmt(max(spr$IRR))`; los cinco escenarios mantuvieron la dirección, intervalos
 con límite inferior mayor que 1 y alta probabilidad posterior de IRR>1. No fue
 necesaria una sensibilidad por completitud del origen materno.
@@ -264,7 +285,7 @@ include_graphics("figures/articulo/figura1_tasas_predicciones.png")
 include_graphics("figures/articulo/figura2_estimaciones_principales.png")
 ```
 
-```{r fig3, fig.cap="Figura 3. Control prenatal por origen materno entre los casos."}
+```{r fig3, fig.cap="Figura 3. Densidad de contactos prenatales por origen materno entre los casos (clasificación operacional: denso/no denso)."}
 include_graphics("figures/articulo/figura3_control_prenatal_origen.png")
 ```
 
@@ -272,15 +293,19 @@ include_graphics("figures/articulo/figura3_control_prenatal_origen.png")
 
 El origen materno extranjero se asoció con una incidencia hospitalaria registrada
 mayor después de ajustar por una tendencia temporal común flexible. La dirección
-y la interpretación se conservaron al excluir 2021 y bajo cambios razonables de
-los priors, mientras que los diagnósticos MCMC y LOO no indicaron dependencia
-crítica de problemas de muestreo o de un único estrato.
+y la interpretación se conservaron al excluir 2021, al excluir 2024 y bajo
+cambios razonables de los priors. Los diagnósticos MCMC (Rhat, ESS,
+divergencias, E-BFMI) no indicaron problemas de muestreo, y los valores de
+Pareto-k de LOO no indicaron influencia excesiva de un único estrato sobre la
+estabilidad predictiva; son chequeos distintos y ninguno de los dos evalúa
+generalización externa del modelo.
 
 La trayectoria no fue adecuadamente descrita por un cambio anual lineal. El pico
 de 2021 fue poco frecuente bajo la distribución predictiva suave, pero permaneció
-dentro de su ICr95%. Este hallazgo debe interpretarse en el contexto de posibles
-cambios temporales de vigilancia, cobertura institucional, movilidad y atención,
-ninguno de los cuales fue medido de forma suficiente para atribuir mecanismos.
+dentro de su intervalo predictivo posterior del 95% (IP95%). Este hallazgo debe
+interpretarse en el contexto de posibles cambios temporales de vigilancia,
+cobertura institucional, movilidad y atención, ninguno de los cuales fue medido
+de forma suficiente para atribuir mecanismos.
 
 El análisis de control prenatal mostró gran incertidumbre entre los casos. Como
 las covariables individuales no están disponibles en los no-casos, este análisis
@@ -290,16 +315,32 @@ que el control prenatal explique o descarte la diferencia de incidencia.
 Entre las fortalezas se encuentran denominadores por año y origen, tratamiento
 explícito de la sobredispersión y no-linealidad, y evaluación mediante PPC, LOO y
 sensibilidades. Las limitaciones incluyen solo 36 casos extranjeros, 16 años por
-grupo, posible dependencia temporal, cambios de cobertura —incluida posible
-incompletitud de 2024—, covariables individuales solo entre casos y el supuesto
-de una función temporal común con una IRR de origen constante.
+grupo, posible dependencia temporal, cambios de cobertura, una posible
+incompletitud del año 2024 —cuya exclusión no modificó la dirección ni la
+significancia de la IRR—, ausencia de ajuste por confusores maternos
+individuales en el modelo principal, covariables individuales solo entre casos
+y el supuesto de una función temporal común con una IRR de origen constante.
+
+Además, la información disponible no permite documentar con certeza varios
+elementos necesarios para la interpretación epidemiológica plena de las tasas:
+los criterios diagnósticos de laboratorio o clínicos empleados para definir un
+caso de sífilis congénita, la correspondencia exacta entre los nacimientos de
+los casos y los nacimientos institucionales que forman el denominador
+(incluida la posibilidad de gestantes o neonatos derivados desde otros
+centros), el manejo de mortinatos en el numerador y el denominador, y la
+verificación de duplicados a nivel de paciente individual (más allá de la
+ausencia de años duplicados en la base agregada)
+[PENDIENTE DE CONFIRMACIÓN POR LOS AUTORES]. Estos elementos no alteran el
+modelo estadístico ajustado, pero son necesarios para una interpretación
+epidemiológica completa de las tasas reportadas.
 
 # Conclusiones
 
 Entre 2009 y 2024, el origen materno extranjero se asoció con mayor incidencia
 hospitalaria registrada de sífilis congénita. La inferencia fue robusta a la
-exclusión de 2021 y a priors razonables. Los resultados no establecen causalidad
-ni permiten evaluar si el control prenatal media la asociación observada.
+exclusión de 2021, a la exclusión de 2024 y a priors razonables. Los resultados
+no establecen causalidad ni permiten evaluar si el control prenatal media la
+asociación observada.
 
 # Referencias
 
@@ -324,13 +365,17 @@ ft(den,"Tabla S3. Verificación aritmética de denominadores","Nacionales = tota
 ft(s21|>mutate(across(where(is.numeric),~round(.x,4))),"Tabla S4. Sensibilidad excluyendo ambos estratos de 2021","El modelo principal conserva los 32 estratos.")
 ```
 
+```{r tablaS4b}
+ft(s24|>mutate(across(where(is.numeric),~round(.x,4))),"Tabla S4b. Sensibilidad excluyendo ambos estratos de 2024","Realizada porque no pudo confirmarse documentalmente si 2024 corresponde a un año completo de registro institucional.")
+```
+
 ```{r tablaS5}
 spr_show<-spr|>select(escenario,IRR,ICr95_inf,ICr95_sup,P_IRR_gt_1,shape,shape_inf,shape_sup,Rhat_max,divergencias,ELPD_LOO)|>mutate(across(where(is.numeric),~round(.x,3)))
 ft(spr_show,"Tabla S5. Sensibilidad de priors","Cada escenario modifica únicamente el prior señalado.")
 ```
 
 ```{r tablaS6}
-ft(ppc|>mutate(valor=round(valor,4)),"Tabla S6. Resumen de comprobaciones predictivas posteriores","Yrep: conteos generados con posterior_predict().")
+ft(ppc|>mutate(valor=round(valor,4)),"Tabla S6. Resumen de comprobaciones predictivas posteriores","Yrep: conteos generados con posterior_predict(); IP95: intervalo predictivo posterior del 95% (no es un intervalo de credibilidad de parámetro).")
 ```
 
 ```{r tablaS7}

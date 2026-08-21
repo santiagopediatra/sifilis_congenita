@@ -44,15 +44,15 @@ Backend: rstan
 **Veredicto:** Excelente convergencia.
 
 ### Sobredispersión Capturada
-- **Shape NB:** 4.20 (ICr95% 2.01–7.51)
-- **1/Shape:** 0.238 (moderada, no extrema)
+- **Shape NB:** 4.01 (ICr95% 2.01–7.51)
+- **1/Shape:** 0.250 (moderada, no extrema)
 - **Prior:** Gamma(2,2) ✓
 
 ### Validación Predictiva
 
 #### Comprobación Predictiva Posterior (PPC)
 - **P(var(y_rep) ≥ var(y_obs)):** 0.709
-- **Interpretación:** Varianza capturada adecuadamente (esperado 0.4–0.6; valor conservador)
+- **Interpretación:** No se identificó un fallo sistemático en la reproducción de la varianza observada.
 - **Mejora vs Script 08:** +262% (0.27 → 0.709)
 
 #### Predicción Punto Influyente (2021-nacional)
@@ -64,8 +64,8 @@ Backend: rstan
 
 #### LOO-ELPD (Validación Cruzada)
 - **ELPD-LOO:** −80.24 (SE 5.95)
-- **Pareto k:** todos < 0.7 (sin outliers influyentes)
-- **Interpretación:** Modelo generaliza bien
+- **Pareto k:** todos < 0.7 (sin estratos con influencia problemática identificada por Pareto-k)
+- **Interpretación:** Estabilidad predictiva interna adecuada; LOO no evalúa generalización a otros hospitales o poblaciones.
 
 ---
 
@@ -119,12 +119,12 @@ Spline captura patrón no-lineal:
 
 | Parámetro | Estimación | IC95% Credibilidad | P(>1) | Conclusión |
 |-----------|------------|-------------------|-------|-----------|
-| **OR** (extra vs nac) | 0.60 | 0.25–1.33 | 0.112 | No significativo |
+| **OR** (extra vs nac) | 0.60 | 0.25–1.33 | 0.112 | Incierto |
 
 **Interpretación:** 
-- IC cruza 1
-- Madres extranjeras **NO tienen control prenatal menos denso**
-- **Disparidad de incidencia (IRR 2.37) NO se explica por control prenatal**
+- IC amplio y cruza 1: no hay evidencia suficiente para afirmar una dirección
+- No puede concluirse que el control prenatal (según esta clasificación operacional) sea más o menos denso en madres extranjeras
+- Este análisis, restringido a los casos, no permite establecer si el control prenatal explica o descarta la disparidad de incidencia (IRR 2.37); para ello se requerirían no-casos con covariables comparables
 
 ---
 
@@ -144,9 +144,9 @@ Spline captura patrón no-lineal:
 ## 6. CONCLUSIONES PARA EL ARTÍCULO
 
 ### Hallazgos Principales
-1. **Incidencia elevada en madres extranjeras:** IRR 2.37 (ICr95% 1.42–3.99, P>0.99)
+1. **Incidencia elevada en madres extranjeras:** IRR 2.37 (ICr95% 1.42–3.99, P>0.99); robusta a la exclusión de 2021, de 2024 y a priors alternativos (ver Tablas S4, S4b y S5 del artículo)
 2. **Patrón temporal no-lineal:** Escalada 2018–2021, pico 2021, descenso posterior
-3. **Control prenatal:** Insuficiente en ambos grupos (~70% subóptimo), pero **no explica disparidad**
+3. **Control prenatal:** Insuficiente en ambos grupos (~70% no denso), sin evidencia suficiente para afirmar diferencia por origen; no permite establecer mediación
 
 ### Fortalezas Metodológicas
 - ✅ Convergencia MCMC óptima
@@ -160,11 +160,20 @@ Spline captura patrón no-lineal:
 - ⚠ Pico 2021 no capturado al 100% (P=0.061) → punto influyente problemático
 - ⚠ Datos agregados a estratos → no pueden estimarse factores de riesgo individuales
 - ⚠ Posible confusión no medida por cambios de vigilancia, cobertura, o migración
+- ⚠ No pudo confirmarse documentalmente si 2024 es un año completo de registro
+  (2.358 nacimientos, muy por debajo de todos los años previos desde 2018); la
+  sensibilidad excluyendo 2024 dio IRR 2.32 (ICr95% 1.34–3.85), similar al
+  modelo principal (ver `output/articulo/tabla_sensibilidad_2024.csv`)
+- ⚠ No hay documentación disponible sobre criterios diagnósticos de laboratorio
+  para definir un caso, correspondencia exacta entre nacimientos de los casos y
+  el hospital que genera los denominadores, manejo de mortinatos, ni
+  verificación de duplicados a nivel de paciente individual: pendiente de
+  confirmación por los autores
 
 ### Recomendaciones
 1. **Reportar como modelo confirmatorio:** Preespecificado lineal, BUT sensibilidad con spline
 2. **Destacar punto influyente 2021:** Diapositiva separada sobre por qué no se captura al 100%
-3. **No sobreinterpretar control prenatal:** La densidad **no es predictor** en modelo; solo descriptiva
+3. **No sobreinterpretar control prenatal:** La densidad **no es predictor** en modelo; solo descriptiva. No afirmar que explica ni que descarta la disparidad de incidencia.
 4. **Proponer investigación etiológica:** Si no es control prenatal, ¿qué explica IRR 2.37?
 
 ---

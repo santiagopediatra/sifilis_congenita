@@ -62,7 +62,7 @@ write_csv(mcmc,"output/articulo/tabla_diagnosticos_mcmc.csv")
 set.seed(SEED); yr<-posterior_predict(fit); yobs<-estr$casos
 i21<-which(estr$anio==2021 & estr$origen=="nacional")
 vr<-apply(yr,1,var); vobs<-var(yobs); q21<-quantile(yr[,i21],c(.025,.975))
-ppc<-tibble(metrica=c("Varianza observada","P(var yrep >= var yobs)","2021 nacional observado","2021 mediana predictiva","2021 ICr95 inf","2021 ICr95 sup","P(yrep >= observado)","Percentil observado"),valor=c(vobs,mean(vr>=vobs),yobs[i21],median(yr[,i21]),q21[1],q21[2],mean(yr[,i21]>=yobs[i21]),mean(yr[,i21]<=yobs[i21])))
+ppc<-tibble(metrica=c("Varianza observada","P(var yrep >= var yobs)","2021 nacional observado","2021 mediana predictiva","2021 IP95 inf","2021 IP95 sup","P(yrep >= observado)","Percentil observado"),valor=c(vobs,mean(vr>=vobs),yobs[i21],median(yr[,i21]),q21[1],q21[2],mean(yr[,i21]>=yobs[i21]),mean(yr[,i21]<=yobs[i21])))
 write_csv(ppc,"output/articulo/tabla_ppc_summary.csv")
 pdfun<-bind_rows(tibble(valor=vr,panel="Varianza global",observado=vobs),tibble(valor=yr[,i21],panel="Conteo 2021-nacional",observado=yobs[i21]))
 gp<-ggplot(pdfun,aes(valor))+geom_histogram(bins=35,fill="#2166AC",alpha=.8)+geom_vline(aes(xintercept=observado),color="#D6604D",linewidth=1)+facet_wrap(~panel,scales="free",ncol=1)+theme_minimal(base_size=11)+labs(x="Valor replicado",y="Frecuencia",title="Comprobaciones predictivas posteriores",subtitle="Línea naranja: valor observado")
