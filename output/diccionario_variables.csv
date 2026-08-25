@@ -33,7 +33,7 @@ VIOLENCIA.CODIGO,binaria,numeric,213,42,16.5,2,0,1,5,0=208; 1=5
 Hemorragia.1er..trim.,binaria,numeric,253,2,0.8,2,0,1,7,0=246; 1=7
 Hemorragia.2do..trim.,binaria,numeric,253,2,0.8,2,0,1,6,0=247; 1=6
 Hemorragia.3er..trim.,binaria,numeric,250,5,2,2,0,1,8,0=242; 1=8
-Número.Consultas.prenatales,numerica_continua_discreta,numeric,251,4,1.6,15,0,15,NA,6=41; 7=29; 3=28; 5=28; 8=26; 4=25; 9=20; 10=15
+Número.Consultas.prenatales,numerica_continua_discreta,numeric,251,4,1.6,15,0,15,NA,6=44; 5=30; 8=28; 3=24; 7=24; 4=23; 9=19; 10=16
 Consultas.prenatales.CATEGORIA,categorica_nominal_ordinal,character,251,4,1.6,4,NA,NA,11,5 A 7=98; 8 O MAS=73; 1 A 4=69; NINGUNA=11
 TIPO.DE.PARTO,binaria,character,255,0,0,2,NA,NA,105,vaginal=150; cesárea=105
 Motivo.principal.de.induccion.o.cirugia,texto_alta_cardinalidad,character,102,153,60,18,NA,NA,NA,ITERATIVA=37; COMPROMISO DEL BIENESTAR FETAL=14; EMBARAZO MULTIPLE=7; DESPRENDIMIENTO PLACENTARIO=6; DESPROPORCION CEFALOPELVICA=6; PREECLAMPSIA=6; PELVIANO=5; SIFILIS=4

@@ -1,8 +1,8 @@
-Fecha/hora: 2026-08-12 12:56:24
+Fecha/hora: 2026-08-25 11:49:20
 Script: R/12_cierre_auditoria_articulo.R | OK
 Semilla: 20260810
 Modelo principal: cargado desde output/bayes/fit_nb_spline_final_con_densidad.rds
 Sensibilidad sin 2021 (ambos orígenes): realizada | OK
 Sensibilidad de priors (5 escenarios): realizada | OK
 PPC y LOO: realizados | OK
-Render final: articulo_maestro.docx | OK
+Render final: ejecutar después de este script

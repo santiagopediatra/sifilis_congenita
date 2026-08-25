@@ -1,3 +1,0 @@
-chequeo,valor_observado,probabilidad_posterior
-P(y_rep >= y_obs) 2021-nacional,24,2.5e-4
-P(var(y_rep) >= var(y_obs)),59.32157258064516,0.282125
