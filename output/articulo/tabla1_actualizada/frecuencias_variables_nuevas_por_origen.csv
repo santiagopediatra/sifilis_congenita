@@ -1,0 +1,34 @@
+variable,origen,categoria,n,denominador,porcentaje
+Pareja estable,Total,NO,76,255,29.80392156862745
+Pareja estable,Total,SI,179,255,70.19607843137256
+Pareja estable,Nacional,NO,65,219,29.680365296803654
+Pareja estable,Nacional,SI,154,219,70.31963470319634
+Pareja estable,Extranjera,NO,11,36,30.555555555555557
+Pareja estable,Extranjera,SI,25,36,69.44444444444444
+Embarazo planeado,Total,no,173,255,67.84313725490196
+Embarazo planeado,Total,si,82,255,32.15686274509804
+Embarazo planeado,Nacional,no,151,219,68.94977168949772
+Embarazo planeado,Nacional,si,68,219,31.050228310502284
+Embarazo planeado,Extranjera,no,22,36,61.111111111111114
+Embarazo planeado,Extranjera,si,14,36,38.888888888888886
+Escolaridad,Total,Ninguna,8,255,3.1372549019607843
+Escolaridad,Total,Primaria,74,255,29.019607843137255
+Escolaridad,Total,Secundaria,158,255,61.96078431372549
+Escolaridad,Total,Superior,15,255,5.882352941176471
+Escolaridad,Nacional,Ninguna,8,219,3.65296803652968
+Escolaridad,Nacional,Primaria,62,219,28.310502283105023
+Escolaridad,Nacional,Secundaria,136,219,62.10045662100457
+Escolaridad,Nacional,Superior,13,219,5.936073059360731
+Escolaridad,Extranjera,Primaria,12,36,33.333333333333336
+Escolaridad,Extranjera,Secundaria,22,36,61.111111111111114
+Escolaridad,Extranjera,Superior,2,36,5.555555555555555
+Trastorno hipertensivo,Total,HTA inducida,4,253,1.5810276679841897
+Trastorno hipertensivo,Total,NINGUNO,225,253,88.93280632411067
+Trastorno hipertensivo,Total,PREECLAMPSIA,24,253,9.486166007905139
+Trastorno hipertensivo,Total,Missing,2,253,NA
+Trastorno hipertensivo,Nacional,HTA inducida,4,217,1.8433179723502304
+Trastorno hipertensivo,Nacional,NINGUNO,191,217,88.0184331797235
+Trastorno hipertensivo,Nacional,PREECLAMPSIA,22,217,10.138248847926267
+Trastorno hipertensivo,Nacional,Missing,2,217,NA
+Trastorno hipertensivo,Extranjera,NINGUNO,34,36,94.44444444444444
+Trastorno hipertensivo,Extranjera,PREECLAMPSIA,2,36,5.555555555555555

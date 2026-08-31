@@ -1,0 +1,2 @@
+contraste,Delta_ELPD,SE_Delta_ELPD,interpretacion
+Binomial negativa menos Poisson,2.6349934634567127,5.301973865168063,"La binomial negativa no mostro una mejora predictiva clara frente a Poisson; dado el desempeno adecuado de Poisson y su menor complejidad, Poisson se selecciono como modelo principal por parsimonia."

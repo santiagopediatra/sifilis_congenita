@@ -1,0 +1,11 @@
+AUDITORIA TABLA 1 ACTUALIZADA
+Fuente: output/SIFILIS_hgoia_con_densidad_controles.csv
+N=255; nacional=219; extranjera=36.
+Codificacion confirmada: Estudios.CODIGO 0=ninguna, 1=primaria, 2=secundaria, 3=superior.
+No existen codigos de escolaridad fuera de 0-3.
+Las 13 filas historicas de Tabla 1 se reprodujeron exactamente.
+Los porcentajes usan denominadores disponibles; no hubo imputacion.
+No se ejecutaron pruebas de hipotesis ni regresiones.
+Formula Poisson verificada: structure(list(formula = casos ~ origen + s(anio_c, k = 4, bs = "tp") +      offset(log_nacimientos), pforms = list(), pfix = list(),      resp = "casos", family = structure(list(family = "poisson",          link = "log", linkfun = function (mu)          link(mu, link = slink), linkinv = function (eta)          inv_link(eta, link = slink), dpars = "mu", type = "int",          ybounds = c(0, Inf), closed = c(TRUE, NA), ad = c("weights",          "subset", "cens", "trunc", "rate", "index"), specials = "sbi_log"), class = c("brmsfamily",      "family")), mecor = TRUE), class = c("brmsformula", "bform" ))
+Las variables descriptivas nuevas no aparecen en el modelo Poisson: VERIFICADO.
+Manuscritos y base original: NO MODIFICADOS.

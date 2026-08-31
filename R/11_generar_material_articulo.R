@@ -231,9 +231,9 @@ nodos <- tribble(
   "origen", "Origen\nmaterno", 0, 2, "exposicion",
   "social", "Determinantes sociales\ny barreras de acceso", 2, 3, "no_medido",
   "infeccion", "Sífilis materna:\nexposición y tratamiento", 4, 2.8, "no_medido",
-  "cpn", "Densidad de control\nprenatal", 3, 1.2, "medido_casos",
+  "cpn", "Número de consultas\nprenatales", 3, 1.2, "medido_casos",
   "anio", "Año calendario /\nmigración / vigilancia", 0.5, 0, "medido",
-  "resultado", "Sífilis congénita\n(incidencia)", 6, 2, "resultado"
+  "resultado", "Sífilis congénita registrada\nhospitalariamente", 6, 2, "resultado"
 )
 aristas <- tribble(
   ~desde, ~hasta,
@@ -258,10 +258,11 @@ dag <- ggraph(grafo_dag, layout = "manual", x = nodos$x, y = nodos$y) +
                                no_medido = "#EFE3F7"), guide = "none") +
   coord_equal(xlim = c(-.7, 6.8), ylim = c(-.6, 3.7), clip = "off") +
   labs(title = "DAG conceptual del contraste por origen materno",
-       caption = "El control prenatal se observa solo entre casos y no identifica mediación. Los determinantes clave no están medidos.") +
+       caption = "El número de consultas prenatales se observa solo entre los casos y no permite evaluar mediación a nivel poblacional. Los determinantes clave no están medidos.") +
   theme_void(base_size = 11) + theme(plot.title = element_text(face = "bold"),
                                      plot.caption = element_text(hjust = 0, size = 8))
-guardar(dag, "figura_dag_conceptual", 9, 5.5)
+ggsave("figures/articulo/FiguraS2_DAG_corregido.png", dag,
+       width = 9, height = 5.5, dpi = 600, bg = "white")
 
 # Documento Word con las tablas editables.
 ft <- function(x, titulo) flextable(x) %>% theme_booktabs() %>% autofit() %>%

@@ -1,0 +1,18 @@
+Elemento,Resultado NB previo,Resultado Poisson nuevo,Cambio necesario
+IRR principal,2.3718,2.4709,Si
+ICr95%,1.4184-3.9896,1.6856-3.5119,Si
+P(IRR>1),0.99875,1.00000,Si
+Diagnosticos MCMC,Modelo NB,Modelo Poisson; sin divergencias requerido,Si
+PPC varianza,P=0.7093,P=0.2687,Si
+ELPD-LOO,-80.2409,-82.8759,Si
+Pareto-k maximo,0.4725,0.6954,Si
+Figura 1,Predicciones NB,Predicciones Poisson,Si
+Tabla 2,IRR NB + shape,IRR Poisson; sin shape,Si
+Tabla S4,Diagnosticos NB,Diagnosticos Poisson,Si
+Tabla S5,PPC NB,PPC Poisson,Si
+Tabla S6,LOO/Pareto-k NB,LOO/Pareto-k Poisson,Si
+Tabla S7,Exclusiones NB,Paneles A/B Poisson,Si
+Tabla S8,Priors origen y shape NB,Tres priors de origen Poisson,Si
+Figura S1,PPC NB,PPC Poisson,Si
+Figura S2,DAG independiente de familia,Sin cambios,No
+Figura 2 forest,Archivo existente; citado en Rmd actuales,No regenerada por instruccion,Pendiente de decision al editar manuscrito

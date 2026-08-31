@@ -1,0 +1,99 @@
+AUDITORIA DE DATOS FALTANTES - TABLA 1
+Fuente analitica: output/SIFILIS_hgoia_con_densidad_controles.csv
+La base original SIFILIS_hgoia2009-2024.csv no fue modificada.
+No se imputaron datos ni se recodifico ningun valor como missing.
+
+COMPROBACION
+n disponible + n missing = N total en todas las variables: SI
+Los denominadores de los porcentajes publicados son los casos disponibles: SI
+
+# A tibble: 14 × 8
+   Variable                                `Columna utilizada en la base`    
+   <chr>                                   <chr>                             
+ 1 Casos                                   (recuento de filas elegibles)     
+ 2 Origen materno                          Extrangera                        
+ 3 Edad materna                            Edad.materna                      
+ 4 Consultas prenatales                    controles_prenatales              
+ 5 Densidad de controles/semana            densidad_controles                
+ 6 Control prenatal suboptimo por densidad control_prenatal_densidad         
+ 7 Edad gestacional                        Edad.gestaciol.RN                 
+ 8 Prematuridad                            PREMATURO.CODIGO                  
+ 9 Peso al nacer                           Peso.al.nacer.GRAMOS              
+10 Pequeno para la edad gestacional        PESO.EG.CATEGORIA                 
+11 Tipo de parto                           TIPO.DE.PARTO                     
+12 Trastorno hipertensivo                  TRASTORNOS.HIPERTENSIVOS.CATEGORIA
+13 Defecto congenito                       Defectos.congenitos.CODIGO        
+14 Fallecimiento neonatal                  Egreso.RN                         
+   `N total` `n disponible` `n missing` `% missing` `missing nacional`
+       <int>          <int>       <int>       <dbl>              <int>
+ 1       255            255           0         0                    0
+ 2       255            255           0         0                    0
+ 3       255            255           0         0                    0
+ 4       255            251           4         1.6                  4
+ 5       255            250           5         2                    5
+ 6       255            250           5         2                    5
+ 7       255            254           1         0.4                  1
+ 8       255            254           1         0.4                  1
+ 9       255            255           0         0                    0
+10       255            255           0         0                    0
+11       255            255           0         0                    0
+12       255            253           2         0.8                  2
+13       255            255           0         0                    0
+14       255            255           0         0                    0
+   `missing extranjero`
+                  <int>
+ 1                    0
+ 2                    0
+ 3                    0
+ 4                    0
+ 5                    0
+ 6                    0
+ 7                    0
+ 8                    0
+ 9                    0
+10                    0
+11                    0
+12                    0
+13                    0
+14                    0
+
+VERIFICACION DE PORCENTAJES PUBLICADOS
+# A tibble: 7 × 9
+  variable                                columna                           
+  <chr>                                   <chr>                             
+1 Control prenatal suboptimo por densidad control_prenatal_densidad         
+2 Prematuridad                            PREMATURO.CODIGO                  
+3 Pequeno para la edad gestacional        PESO.EG.CATEGORIA                 
+4 Tipo de parto                           TIPO.DE.PARTO                     
+5 Trastorno hipertensivo                  TRASTORNOS.HIPERTENSIVOS.CATEGORIA
+6 Defecto congenito                       Defectos.congenitos.CODIGO        
+7 Fallecimiento neonatal                  Egreso.RN                         
+  nivel_positivo      n_publicado pct_publicado disponible n_calculado
+  <chr>                     <dbl>         <dbl>      <int>       <int>
+1 subóptimo                   181          72.4        250         181
+2 1                            32          12.6        254          32
+3 pequeño                      54          21.2        255          54
+4 cesárea                     105          41.2        255         105
+5 DISTINTO_DE_NINGUNO          28          11.1        253          28
+6 1                            21           8.2        255          21
+7 fallece                       2           0.8        255           2
+  pct_calculado coincide
+          <dbl> <lgl>   
+1          72.4 TRUE    
+2          12.6 TRUE    
+3          21.2 TRUE    
+4          41.2 TRUE    
+5          11.1 TRUE    
+6           8.2 TRUE    
+7           0.8 TRUE    
+
+CODIFICACIONES E INCONSISTENCIAS
+- El valor 0 es valido: representa cero consultas o la categoria negativa en variables binarias; no se trato como missing.
+- Extrangera esta codificada como no/si (219/36), sin faltantes.
+- Trastorno hipertensivo tiene 2 faltantes; el porcentaje publicado es 28/253 = 11.1%.
+- La densidad requiere simultaneamente consultas y edad gestacional disponibles: faltan 5 casos (4 por consultas y 1 adicional por edad gestacional).
+- PREMATURO.CODIGO tiene el mismo unico faltante que edad gestacional.
+- No se detectaron codigos dudosos adicionales en las columnas de Tabla 1.
+
+SCIENTIFIC ENGLISH FOOTNOTE
+Data are presented as median [interquartile range] or n (%), as appropriate. Percentages were calculated using cases with available information for each variable. Missing data were: prenatal visits, 4/255 (1.6%); prenatal-care visit density and its density-based classification, 5/255 each (2.0%); gestational age and prematurity, 1/255 each (0.4%); and hypertensive disorders, 2/255 (0.8%). There were no missing data for maternal age, birth weight, small for gestational age, mode of delivery, congenital anomalies, neonatal death, or maternal origin. Prenatal-care visit density was calculated as the number of prenatal visits divided by gestational age in weeks and was operationally classified as non-dense when <0.20 visits per week.

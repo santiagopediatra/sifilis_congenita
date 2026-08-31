@@ -1,0 +1,2 @@
+parametro,estimador,ICr95_inf,ICr95_sup,probabilidad_posterior,fuente_modelo
+IRR origen extranjera vs nacional,2.4709454300939386,1.6855903679003732,3.5119220366345836,1,fit_poisson_spline_principal.rds
