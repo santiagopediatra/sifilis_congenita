@@ -1,5 +1,6 @@
 bayesplot
 brms
+broom
 dplyr
 flextable
 ggplot2

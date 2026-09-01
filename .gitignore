@@ -15,6 +15,8 @@ datos/
 bases/
 bases_datos/
 database/
+Partos_pais_origen_2014-2025_HGOIA.csv
+SIFILIS_hgoia2009-2024.csv
 
 # Resultados intermedios y estructura histórica local
 output/
@@ -84,5 +86,6 @@ desktop.ini
 
 # Documentos locales que no forman parte de la versión reproducible
 graficos/Figures_English_Final.docx
+tatus
 /*.md
 !/README.md
