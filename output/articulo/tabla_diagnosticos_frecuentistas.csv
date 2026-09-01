@@ -1,5 +1,0 @@
-comparacion,modelo_1,modelo_2,logLik,AIC,BIC,LRT_chisq,LRT_df,p_value,dispersion_pearson
-Solo origen vs año lineal,casos ~ origen + offset(log_nacimientos),casos ~ origen + anio_c + offset(log_nacimientos),-80.02595324165443,166.05190648330887,170.44911419170805,9.503542397064543,1,0.0020507559978563063,1.931789930453871
-Lineal vs interacción,casos ~ origen + anio_c + offset(log_nacimientos),casos ~ origen * anio_c + offset(log_nacimientos),-79.71653358080049,167.43306716160097,173.2960107727999,0.6188393217078811,1,0.4314789284990161,2.0079153587588485
-Lineal vs spline,casos ~ origen + anio_c + offset(log_nacimientos),"casos ~ origen + ns(anio_c, df = 3) + offset(log_nacimientos)",-73.5269039336894,157.0538078673788,164.38248738137742,12.998098615930083,2,0.0015048691802744439,1.5425381305957433
-Poisson interacción vs NB interacción,casos ~ origen * anio_c + offset(log_nacimientos),casos ~ origen * anio_c + offset(log_nacimientos),-75.17175147873402,160.34350295746805,167.67218247146667,NA,NA,NA,1.0309440650082624

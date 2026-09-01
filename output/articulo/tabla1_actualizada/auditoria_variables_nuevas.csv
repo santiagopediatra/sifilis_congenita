@@ -1,5 +1,0 @@
-Variable,Columna,N_total,n_disponible,n_missing,pct_missing,n_nacional_disponible,n_extranjera_disponible
-Pareja estable,PAREJA.ESTABLE.CATEGORIA,255,255,0,0,219,36
-Embarazo planeado,Embarazo.planeado,255,255,0,0,219,36
-Escolaridad,Estudios.CODIGO,255,255,0,0,219,36
-Trastorno hipertensivo,TRASTORNOS.HIPERTENSIVOS.CATEGORIA,255,253,2,0.8,217,36

@@ -1,8 +1,0 @@
-MIGRACION POISSON: EJECUCION COMPLETA
-Objeto principal: output/bayes/poisson_principal/fit_poisson_spline_principal.rds
-Familia verificada: poisson
-Base original: no modificada
-Modelo NB anterior: conservado y usado solo como sensibilidad de familia
-Manuscritos Rmd/Word: no modificados
-Figura 2 forest: no regenerada
-Figura S2 DAG: no modificada

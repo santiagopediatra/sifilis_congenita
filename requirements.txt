@@ -1,0 +1,17 @@
+bayesplot
+brms
+dplyr
+flextable
+ggplot2
+loo
+MASS
+magick
+officer
+posterior
+purrr
+readr
+rsvg
+stringr
+tibble
+tidyr
+tidyverse

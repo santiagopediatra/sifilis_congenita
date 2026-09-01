@@ -1,2 +1,0 @@
-Outcome,Predictor,N,OR_mediana,OR_IC95_inf,OR_IC95_sup,P_OR_gt_1
-Control prenatal adecuado (densidad >= 0.20),Origen materno (extranjera vs nacional),250,0.4405397337659213,0.17657044138193678,1.0355094467605124,0.028375
